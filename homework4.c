@@ -58,7 +58,7 @@ int main(void)
         //       Check the transmit interrupt flagx prior to transmitting the character.
         if (rChar != 0xFF)
         {
-            charFSM(rChar);
+            finished = charFSM(rChar);
         }
 
 
@@ -82,18 +82,24 @@ void initBoard()
 // TODO: FSM for detecting character sequence.
 bool charFSM(char rChar)
 {
+    static passcode_state_t currentState = S;
     bool finished = false;
-    switch(PS)
+    switch(currentState)
     {
     case S:
+        currentState = S2;
         break;
     case S2:
+        currentState = S25;
         break;
     case S25:
+        currentState = S253;
         break;
     case S253:
+        currentState = S2534;
         break;
     case S2534:
+        currentState = S;
         finished = true;
         break;
     }
